@@ -1,14 +1,25 @@
-# Boosting your Compose Apps
+# Walkthrough
 
-![Compose](https://github.com/enmanuel52/Compose-Boost/assets/102194318/18541363-507d-4ae5-97dc-cadfd7811413)
+![walkthrough](https://github.com/enmanuel52/walkthrough/assets/102194318/ff2b052d-c6b3-43a9-8665-7f32c296a5a7)
 
-1- First than all add the dependency in your build.gradle.kts
+1- First that all add this in the settings.gradle.kts
+```
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        ...
+        maven { url = uri("https://jitpack.io") }
+    }
+}
+```
+
+2- Second add the dependency in your build.gradle.kts
 ```
 implementation("io.github.enmanuel52:walkthrough:0.0.1-alpha")
 ```
 
 
-2- You need a list of pages
+3- You need a list of pages
 
 ```
 val WALK_STEPS = arrayListOf(
@@ -40,7 +51,7 @@ val WALK_STEPS = arrayListOf(
 )
 ```
 
-3- Then just add it, you have a callback when the walk is ended:
+4- Then just add it, you have a callback when the walk is ended:
 
 ```
     Scaffold(
@@ -60,8 +71,12 @@ val WALK_STEPS = arrayListOf(
     }
 ```
 
-3- This is how it looks like with differents types of indicators
+4- This is how it looks like with differents types of indicators, without the toggle button of course :)
 
 
 
-https://github.com/enmanuel52/Compose-Boost/assets/102194318/eacd1626-784f-4fb3-820f-da247cc516b0
+https://github.com/enmanuel52/walkthrough/assets/102194318/ebf9572e-d062-4416-aadd-b67a0bd81534
+
+
+
+
