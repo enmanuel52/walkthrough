@@ -29,7 +29,6 @@ fun WalkStepUi(
 ) {
     Column(
         modifier
-            .fillMaxWidth()
             .padding(DimenTokens.Large),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceEvenly

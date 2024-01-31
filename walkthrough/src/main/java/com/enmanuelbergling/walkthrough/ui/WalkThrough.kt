@@ -7,10 +7,14 @@ import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.PagerScope
+import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
@@ -24,7 +28,8 @@ import com.enmanuelbergling.walkthrough.common.DimenTokens
 import com.enmanuelbergling.walkthrough.model.SkipLocation
 import com.enmanuelbergling.walkthrough.model.StepStyle
 import com.enmanuelbergling.walkthrough.model.WalkStep
-import com.enmanuelbergling.walkthrough.ui.components.SkipButton
+import com.enmanuelbergling.walkthrough.ui.components.IndicatorColors
+import com.enmanuelbergling.walkthrough.ui.components.IndicatorDefaults
 import com.enmanuelbergling.walkthrough.ui.components.WalkThroughColors
 import com.enmanuelbergling.walkthrough.ui.components.WalkThroughDefaults
 import com.enmanuelbergling.walkthrough.ui.components.springAnimation
@@ -33,7 +38,7 @@ import kotlinx.coroutines.launch
 /**
  * @param steps for every single page
  * @param colors for components
- * @param helperButton to scroll
+ * @param nextButtonVisible to scroll
  * @param onGetStarted is launched once the user walk is finished
  * */
 @OptIn(ExperimentalFoundationApi::class)
@@ -41,10 +46,10 @@ import kotlinx.coroutines.launch
 fun WalkThrough(
     steps: List<WalkStep>,
     modifier: Modifier = Modifier,
-    skipButton: @Composable () -> Unit = { SkipButton() },
+    skipButton: @Composable () -> Unit = { },
     skipLocation: SkipLocation = SkipLocation.TopEnd,
     colors: WalkThroughColors = WalkThroughDefaults.colors(),
-    helperButton: Boolean = false,
+    nextButtonVisible: Boolean = false,
     stepStyle: StepStyle = StepStyle.ImageUp,
     onGetStarted: () -> Unit,
 ) {
@@ -60,7 +65,7 @@ fun WalkThrough(
         val (
             page,
             indicator,
-            skipButton,
+            skipButtonRef,
             nextButton,
         ) = createRefs()
 
@@ -80,7 +85,8 @@ fun WalkThrough(
         ) { index ->
             WalkStepUi(
                 step = steps[index],
-                modifier = Modifier.fillMaxHeight(.8f),
+                modifier = Modifier.fillMaxHeight(.8f)
+                    .fillMaxWidth(),
                 stepStyle = stepStyle
             )
         }
@@ -101,7 +107,7 @@ fun WalkThrough(
 
         Box(modifier = Modifier
             .constrainAs(
-                skipButton
+                skipButtonRef
             ) {
                 end.linkTo(parent.end)
                 when (skipLocation) {
@@ -115,7 +121,7 @@ fun WalkThrough(
         }
 
         AnimatedVisibility(
-            visible = helperButton || !pagerState.canScrollForward,
+            visible = nextButtonVisible || !pagerState.canScrollForward,
             modifier = Modifier
                 .constrainAs(nextButton) {
                     top.linkTo(indicator.bottom)
@@ -148,41 +154,35 @@ fun WalkThrough(
 
 /**
  * A fully customizable implementation of the Walkthrough for the page content
- * @param pageCount number of pages
- * @param colors for components
- * @param onGetStarted is launched once the user walk is finished
+ * @param indicatorColors
+ * @param nextButton will be placed at the bottom of the screen
  * */
-/*
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun WalkThrough(
-    pageCount: Int,
+    pagerState: PagerState,
     modifier: Modifier = Modifier,
-    skipButton: @Composable () -> Unit = { SkipButton {} },
-    colors: WalkThroughColors = WalkThroughDefaults.colors(),
-    onGetStarted: () -> Unit = {},
+    nextButton: @Composable () -> Unit = { },
+    skipButton: @Composable () -> Unit = { },
+    skipLocation: SkipLocation = SkipLocation.TopEnd,
+    indicatorColors: IndicatorColors = IndicatorDefaults.colors(),
     pageContent: @Composable (PagerScope.(Int) -> Unit),
 ) {
-    val pagerState = rememberPagerState { pageCount }
-
-    val scope = rememberCoroutineScope()
 
     ConstraintLayout(modifier = modifier.fillMaxSize()) {
         val (
-            step,
-            previous,
+            page,
             indicator,
-            next,
+            skipButtonRef,
+            nextButtonRef,
         ) = createRefs()
 
-        val verticalGuideline15 = createGuidelineFromStart(.15f)
-        val verticalGuideline85 = createGuidelineFromEnd(.15f)
-
-        createHorizontalChain(previous, indicator, next, chainStyle = ChainStyle.Packed)
+        val bottomContentTop = createGuidelineFromTop(.8f)
 
         HorizontalPager(
-            state = pagerState, modifier = Modifier
-                .constrainAs(step) {
+            state = pagerState,
+            modifier = Modifier
+                .constrainAs(page) {
                     top.linkTo(parent.top)
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
@@ -190,66 +190,56 @@ fun WalkThrough(
                     height = Dimension.fillToConstraints
                     width = Dimension.fillToConstraints
                 },
-            pageContent = pageContent
-        )
+        ) {
+            Column(modifier = Modifier.fillMaxHeight(.8f)) {
+                pageContent(it)
+            }
+        }
 
         StepIndicator(
             pageIndex = pagerState.currentPage,
             pageCount = pagerState.pageCount,
             modifier = Modifier
                 .constrainAs(indicator) {
-                    start.linkTo(previous.end)
-                    end.linkTo(next.start)
-                    bottom.linkTo(parent.bottom)
-                    height = Dimension.percent(.15f)
+                    top.linkTo(bottomContentTop, margin = DimenTokens.Medium)
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                    bottom.linkTo(nextButtonRef.top)
                 }
                 .padding(DimenTokens.Medium),
+            colors = indicatorColors
         )
 
-        AnimatedVisibility(
-            visible = pagerState.canScrollBackward,
-            modifier = Modifier
-                .constrainAs(previous) {
-                    start.linkTo(verticalGuideline15)
-                    top.linkTo(indicator.top)
-                    bottom.linkTo(parent.bottom)
-                    end.linkTo(indicator.start)
-                }
-        ) {
-            FilledTonalButton(
-                onClick = {
-                    scope.launch {
-                        pagerState.animateScrollToPage(pagerState.currentPage - 1)
-                    }
-                },
-                colors = colors.filledButton()
+        Box(modifier = Modifier
+            .constrainAs(
+                skipButtonRef
             ) {
-                previousIcon()
+                end.linkTo(parent.end)
+                when (skipLocation) {
+                    SkipLocation.TopEnd -> top.linkTo(parent.top)
+                    SkipLocation.BottomEnd -> bottom.linkTo(parent.bottom)
+                }
             }
+            .padding(DimenTokens.Small)
+        ) {
+            skipButton()
         }
 
-
-        FilledTonalButton(
-            onClick = {
-                if (pagerState.canScrollForward) {
-                    scope.launch {
-                        pagerState.animateScrollToPage(pagerState.currentPage + 1)
-                    }
-                } else {
-                    onGetStarted()
-                }
-            },
+        AnimatedVisibility(
+            visible = !pagerState.canScrollForward,
             modifier = Modifier
-                .constrainAs(next) {
-                    start.linkTo(indicator.end)
-                    top.linkTo(indicator.top)
+                .constrainAs(nextButtonRef) {
+                    top.linkTo(indicator.bottom)
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
                     bottom.linkTo(parent.bottom)
-                    end.linkTo(verticalGuideline85)
-                },
-            colors = colors.filledButton()
-
+                    width = Dimension.fillToConstraints
+                }
+                .padding(DimenTokens.LessLarge),
+            enter = slideInVertically(springAnimation()) { it },
+            exit = slideOutVertically { it } + fadeOut()
         ) {
-            forwardIcon()
+            nextButton()
         }
     }
-}*/
+}
