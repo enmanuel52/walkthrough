@@ -50,8 +50,9 @@ android {
 }
 
 dependencies {
-    implementation("com.github.enmanuel52:walkthrough:1.0.0")
+//    implementation("com.github.enmanuel52:walkthrough:1.0.0")
 
+    implementation(project(":walkthrough"))
     implementation("androidx.core:core-splashscreen:1.0.1")
 
     implementation("androidx.core:core-ktx:1.12.0")

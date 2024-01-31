@@ -21,7 +21,6 @@ import androidx.constraintlayout.compose.ChainStyle
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import com.enmanuelbergling.walkthrough.common.DimenTokens
-import com.enmanuelbergling.walkthrough.model.WalkIndicator
 import com.enmanuelbergling.walkthrough.model.WalkStep
 import com.enmanuelbergling.walkthrough.ui.components.DefaultDoneIcon
 import com.enmanuelbergling.walkthrough.ui.components.DefaultForwardIcon
@@ -44,7 +43,6 @@ fun WalkThrough(
     previousIcon: @Composable () -> Unit = { DefaultPreviousIcon() },
     forwardIcon: @Composable () -> Unit = { DefaultForwardIcon() },
     doneIcon: @Composable () -> Unit = { DefaultDoneIcon() },
-    style: WalkIndicator = WalkIndicator.Dots,
     colors: WalkThroughColors = WalkThroughDefaults.colors(),
     onEnd: () -> Unit,
 ) {
@@ -84,7 +82,8 @@ fun WalkThrough(
         }
 
         StepIndicator(
-            pagerState = pagerState,
+            pageIndex = pagerState.currentPage,
+            pageCount = pagerState.pageCount,
             modifier = Modifier
                 .constrainAs(indicator) {
                     start.linkTo(previous.end)
@@ -93,7 +92,6 @@ fun WalkThrough(
                     height = Dimension.percent(.15f)
                 }
                 .padding(DimenTokens.Medium),
-            style = style,
             colors = colors.indicator()
         )
 
@@ -176,7 +174,6 @@ fun WalkThrough(
     modifier: Modifier = Modifier,
     previousIcon: @Composable () -> Unit = { DefaultPreviousIcon() },
     forwardIcon: @Composable () -> Unit = { DefaultForwardIcon() },
-    style: WalkIndicator = WalkIndicator.Dots,
     colors: WalkThroughColors = WalkThroughDefaults.colors(),
     onEnd: () -> Unit = {},
     pageContent: @Composable (PagerScope.(Int) -> Unit),
@@ -212,7 +209,8 @@ fun WalkThrough(
         )
 
         StepIndicator(
-            pagerState = pagerState,
+            pageIndex = pagerState.currentPage,
+            pageCount = pagerState.pageCount,
             modifier = Modifier
                 .constrainAs(indicator) {
                     start.linkTo(previous.end)
@@ -221,7 +219,6 @@ fun WalkThrough(
                     height = Dimension.percent(.15f)
                 }
                 .padding(DimenTokens.Medium),
-            style = style
         )
 
         AnimatedVisibility(
