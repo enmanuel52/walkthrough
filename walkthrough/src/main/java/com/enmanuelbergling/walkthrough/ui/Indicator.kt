@@ -27,13 +27,9 @@ import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -131,26 +127,12 @@ fun PageIndicator(
     pageCount: Int,
     modifier: Modifier = Modifier,
 ) {
-    var previousPage by remember {
-        mutableIntStateOf(currentPage)
-    }
-
-    var previous by remember {
-        mutableStateOf(false)
-    }
-
-    LaunchedEffect(key1 = currentPage) {
-        previous = currentPage < previousPage
-        Log.d(TAG, "PageIndicator: $previous")
-        previousPage = currentPage
-    }
 
     Box(modifier) {
         Row(Modifier.align(Alignment.Center)) {
             AnimatedCounter(
                 number = currentPage.plus(1),
-                textStyle = MaterialTheme.typography.titleMedium,
-                previous = previous
+                textStyle = MaterialTheme.typography.titleMedium
             )
             Text(text = " / $pageCount", style = MaterialTheme.typography.titleMedium)
         }
