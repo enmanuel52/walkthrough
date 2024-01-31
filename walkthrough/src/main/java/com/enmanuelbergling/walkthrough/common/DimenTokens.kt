@@ -3,7 +3,7 @@ package com.enmanuelbergling.walkthrough.common
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
-object DimenTokens {
+internal object DimenTokens {
     val One: Dp = 1.dp
     val SuperSmall: Dp = 2.dp
     val VerySmall: Dp = 4.dp

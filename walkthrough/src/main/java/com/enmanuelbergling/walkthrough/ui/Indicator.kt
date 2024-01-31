@@ -7,6 +7,7 @@ import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.core.updateTransition
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
@@ -28,7 +29,11 @@ fun StepIndicator(
     modifier: Modifier = Modifier,
     colors: IndicatorColors = IndicatorDefaults.colors(),
 ) {
-    Row(modifier, verticalAlignment = Alignment.CenterVertically) {
+    Row(
+        modifier,
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(DimenTokens.VerySmall)
+    ) {
         (0 until pageCount).forEach { currentPage ->
             val activeTransition =
                 updateTransition(
