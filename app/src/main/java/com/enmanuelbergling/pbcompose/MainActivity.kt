@@ -6,8 +6,6 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
@@ -21,9 +19,8 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.enmanuelbergling.pbcompose.data.WALK_STEPS
 import com.enmanuelbergling.pbcompose.ui.theme.PbcomposeTheme
 import com.enmanuelbergling.walkthrough.common.DimenTokens
-import com.enmanuelbergling.walkthrough.model.StepStyle
-import com.enmanuelbergling.walkthrough.ui.WalkStepUi
 import com.enmanuelbergling.walkthrough.ui.WalkThrough
+import com.enmanuelbergling.walkthrough.ui.components.SkipButton
 import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
@@ -38,8 +35,6 @@ class MainActivity : ComponentActivity() {
             val snackBarHost = remember { SnackbarHostState() }
             val scope = rememberCoroutineScope()
 
-            val pagerState = rememberPagerState { WALK_STEPS.count() }
-
             PbcomposeTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(
@@ -50,24 +45,26 @@ class MainActivity : ComponentActivity() {
                         snackbarHost = { SnackbarHost(snackBarHost) }
                     ) { paddingValues ->
                         WalkThrough(
-                            pagerState = pagerState,
+                            steps = WALK_STEPS,
                             modifier = Modifier.padding(paddingValues),
-                            nextButton = {
-                                if (!pagerState.canScrollForward) {
-                                    Button(onClick = {
-                                        scope.launch {
-                                            snackBarHost.showSnackbar("The walk is ended")
-                                        }
-                                    }) {
-                                        Text(
-                                            text = "Get started",
-                                            modifier = Modifier.padding(vertical = DimenTokens.Small)
-                                        )
+                            nextButtonText = { ended ->
+                                Text(
+                                    text = if (ended) "Get started" else "Next",
+                                    modifier = Modifier.padding(vertical = DimenTokens.Small)
+                                )
+                            },
+                            skipButton = {
+                                SkipButton {
+                                    scope.launch {
+                                        snackBarHost.showSnackbar("The walk has been skipped")
                                     }
                                 }
                             },
+                            nextButtonVisible = true
                         ) {
-                            WalkStepUi(step = WALK_STEPS[it], stepStyle = StepStyle.ImageDown, modifier = Modifier.fillMaxSize())
+                            scope.launch {
+                                snackBarHost.showSnackbar("The walk has ended")
+                            }
                         }
                     }
                 }

@@ -17,7 +17,6 @@ import androidx.compose.foundation.pager.PagerScope
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.Button
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -25,7 +24,6 @@ import androidx.compose.ui.Modifier
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import com.enmanuelbergling.walkthrough.common.DimenTokens
-import com.enmanuelbergling.walkthrough.model.SkipLocation
 import com.enmanuelbergling.walkthrough.model.StepStyle
 import com.enmanuelbergling.walkthrough.model.WalkStep
 import com.enmanuelbergling.walkthrough.ui.components.IndicatorColors
@@ -39,6 +37,7 @@ import kotlinx.coroutines.launch
  * @param steps for every single page
  * @param colors for components
  * @param nextButtonVisible to scroll
+ * @param nextButtonText text to react when ended or not
  * @param onGetStarted is launched once the user walk is finished
  * */
 @OptIn(ExperimentalFoundationApi::class)
@@ -47,9 +46,9 @@ fun WalkThrough(
     steps: List<WalkStep>,
     modifier: Modifier = Modifier,
     skipButton: @Composable () -> Unit = { },
-    skipLocation: SkipLocation = SkipLocation.TopEnd,
     colors: WalkThroughColors = WalkThroughDefaults.colors(),
     nextButtonVisible: Boolean = false,
+    nextButtonText: @Composable (ended: Boolean) -> Unit = {},
     stepStyle: StepStyle = StepStyle.ImageUp,
     onGetStarted: () -> Unit,
 ) {
@@ -69,7 +68,7 @@ fun WalkThrough(
             nextButton,
         ) = createRefs()
 
-        val bottomContentTop = createGuidelineFromTop(.8f)
+        val bottomContentTop = createGuidelineFromTop(.7f)
 
         HorizontalPager(
             state = pagerState, modifier = Modifier
@@ -85,7 +84,8 @@ fun WalkThrough(
         ) { index ->
             WalkStepUi(
                 step = steps[index],
-                modifier = Modifier.fillMaxHeight(.8f)
+                modifier = Modifier
+                    .fillMaxHeight(.7f)
                     .fillMaxWidth(),
                 stepStyle = stepStyle
             )
@@ -110,10 +110,7 @@ fun WalkThrough(
                 skipButtonRef
             ) {
                 end.linkTo(parent.end)
-                when (skipLocation) {
-                    SkipLocation.TopEnd -> top.linkTo(parent.top)
-                    SkipLocation.BottomEnd -> bottom.linkTo(parent.bottom)
-                }
+                top.linkTo(parent.top)
             }
             .padding(DimenTokens.Small)
         ) {
@@ -130,7 +127,8 @@ fun WalkThrough(
                     bottom.linkTo(parent.bottom)
                     width = Dimension.fillToConstraints
                 }
-                .padding(DimenTokens.LessLarge),
+                .padding(horizontal = DimenTokens.VeryLarge)
+                .padding(horizontal = DimenTokens.Medium),
             enter = slideInVertically(springAnimation()) { it },
             exit = slideOutVertically { it } + fadeOut()
         ) {
@@ -143,10 +141,7 @@ fun WalkThrough(
                     }
                 }
             }) {
-                Text(
-                    text = if (!pagerState.canScrollForward) "Get started" else "Next",
-                    modifier = Modifier.padding(vertical = DimenTokens.Small)
-                )
+                nextButtonText(!pagerState.canScrollForward)
             }
         }
     }
@@ -164,7 +159,6 @@ fun WalkThrough(
     modifier: Modifier = Modifier,
     nextButton: @Composable () -> Unit = { },
     skipButton: @Composable () -> Unit = { },
-    skipLocation: SkipLocation = SkipLocation.TopEnd,
     indicatorColors: IndicatorColors = IndicatorDefaults.colors(),
     pageContent: @Composable (PagerScope.(Int) -> Unit),
 ) {
@@ -177,7 +171,7 @@ fun WalkThrough(
             nextButtonRef,
         ) = createRefs()
 
-        val bottomContentTop = createGuidelineFromTop(.8f)
+        val bottomContentTop = createGuidelineFromTop(.7f)
 
         HorizontalPager(
             state = pagerState,
@@ -191,7 +185,7 @@ fun WalkThrough(
                     width = Dimension.fillToConstraints
                 },
         ) {
-            Column(modifier = Modifier.fillMaxHeight(.8f)) {
+            Column(modifier = Modifier.fillMaxHeight(.7f)) {
                 pageContent(it)
             }
         }
@@ -215,10 +209,7 @@ fun WalkThrough(
                 skipButtonRef
             ) {
                 end.linkTo(parent.end)
-                when (skipLocation) {
-                    SkipLocation.TopEnd -> top.linkTo(parent.top)
-                    SkipLocation.BottomEnd -> bottom.linkTo(parent.bottom)
-                }
+                top.linkTo(parent.top)
             }
             .padding(DimenTokens.Small)
         ) {

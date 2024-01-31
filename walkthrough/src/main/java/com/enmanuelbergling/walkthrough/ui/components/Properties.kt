@@ -1,6 +1,5 @@
 package com.enmanuelbergling.walkthrough.ui.components
 
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
@@ -19,11 +18,6 @@ data class WalkThroughColors(
         inactiveIndicatorColor = inactiveIndicatorColor,
     )
 
-    @Composable
-    internal fun filledButton() = ButtonDefaults.filledTonalButtonColors(
-        containerColor = buttonContainerColor,
-        contentColor = buttonContentColor
-    )
 }
 
 object WalkThroughDefaults {
