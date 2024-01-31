@@ -15,7 +15,7 @@ dependencyResolutionManagement {
 
 2- Second add the dependency in your build.gradle.kts
 ```
-implementation("io.github.enmanuel52:walkthrough:0.0.1-alpha")
+implementation("io.github.enmanuel52:walkthrough:1.0.2")
 ```
 
 
@@ -54,29 +54,26 @@ val WALK_STEPS = arrayListOf(
 4- Then just add it, you have a callback when the walk is ended:
 
 ```
-    Scaffold(
-        snackbarHost = { SnackbarHost(snackBarHost) }
-    ) { paddingValues ->
-        Box(Modifier.padding(paddingValues)) {
-            WalkThrough(steps = WALK_STEPS, style = style) {
-                scope.launch {
-                    snackBarHost.showSnackbar(
-                        message = "The walk has finished",
-                        duration = SnackbarDuration.Indefinite,
-                        withDismissAction = true
-                    )
-                }
-            }
+WalkThrough(
+steps = WALK_STEPS,
+modifier = Modifier.padding(paddingValues),
+nextButtonText = { ended ->
+    Text(
+        text = if (ended) "Get started" else "Next",
+        modifier = Modifier.padding(vertical = DimenTokens.Small)
+    )
+},
+skipButton = {
+    SkipButton {
+        scope.launch {
+            snackBarHost.showSnackbar("The walk has been skipped")
         }
     }
+},
+nextButtonVisible = true
+) {
+    scope.launch {
+        snackBarHost.showSnackbar("The walk has ended")
+    }
+}
 ```
-
-4- This is how it looks like with differents types of indicators, without the toggle button of course :)
-
-
-
-https://github.com/enmanuel52/walkthrough/assets/102194318/ebf9572e-d062-4416-aadd-b67a0bd81534
-
-
-
-

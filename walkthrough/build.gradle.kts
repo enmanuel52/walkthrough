@@ -63,7 +63,7 @@ publishing {
         register<MavenPublication>("maven") {
             groupId = "com.github.enmanuel52"
             artifactId = "walkthrough"
-            version = "1.0.0"
+            version = "1.0.2"
 
             afterEvaluate {
                 from(components["release"])
