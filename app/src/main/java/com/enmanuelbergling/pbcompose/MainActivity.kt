@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.enmanuelbergling.pbcompose.data.WALK_STEPS
 import com.enmanuelbergling.pbcompose.ui.theme.PbcomposeTheme
+import com.enmanuelbergling.walkthrough.model.StepStyle
 import com.enmanuelbergling.walkthrough.ui.WalkThrough
 import kotlinx.coroutines.launch
 
@@ -43,7 +44,8 @@ class MainActivity : ComponentActivity() {
                         WalkThrough(
                             steps = WALK_STEPS,
                             modifier = Modifier.padding(paddingValues),
-                            helperButton = true,
+                            helperButton = false,
+                            stepStyle = StepStyle.ImageDown,
                         ) {
                             scope.launch {
                                 snackBarHost.showSnackbar(

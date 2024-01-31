@@ -6,8 +6,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 
 @Composable
-fun SkipButton(modifier: Modifier = Modifier, text: String = "Skip", onClick: () -> Unit) {
-    TextButton(onClick = onClick) {
-        Text(text = text)
+internal fun SkipButton(modifier: Modifier = Modifier) {
+    TextButton(onClick = {}) {
+        Text(text = "Skip")
     }
 }

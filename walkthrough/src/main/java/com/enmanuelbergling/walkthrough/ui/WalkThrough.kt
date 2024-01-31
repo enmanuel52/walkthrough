@@ -1,6 +1,9 @@
 package com.enmanuelbergling.walkthrough.ui
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -15,15 +18,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.constraintlayout.compose.ChainStyle
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import com.enmanuelbergling.walkthrough.common.DimenTokens
 import com.enmanuelbergling.walkthrough.model.SkipLocation
+import com.enmanuelbergling.walkthrough.model.StepStyle
 import com.enmanuelbergling.walkthrough.model.WalkStep
 import com.enmanuelbergling.walkthrough.ui.components.SkipButton
 import com.enmanuelbergling.walkthrough.ui.components.WalkThroughColors
 import com.enmanuelbergling.walkthrough.ui.components.WalkThroughDefaults
+import com.enmanuelbergling.walkthrough.ui.components.springAnimation
 import kotlinx.coroutines.launch
 
 /**
@@ -37,10 +41,11 @@ import kotlinx.coroutines.launch
 fun WalkThrough(
     steps: List<WalkStep>,
     modifier: Modifier = Modifier,
-    skipButton: @Composable () -> Unit = { SkipButton {} },
+    skipButton: @Composable () -> Unit = { SkipButton() },
     skipLocation: SkipLocation = SkipLocation.TopEnd,
     colors: WalkThroughColors = WalkThroughDefaults.colors(),
     helperButton: Boolean = false,
+    stepStyle: StepStyle = StepStyle.ImageUp,
     onGetStarted: () -> Unit,
 ) {
     val pagerState = rememberPagerState { steps.count() }
@@ -73,7 +78,11 @@ fun WalkThrough(
                 },
             verticalAlignment = Alignment.Top
         ) { index ->
-            WalkStepUi(step = steps[index], Modifier.fillMaxHeight(.8f))
+            WalkStepUi(
+                step = steps[index],
+                modifier = Modifier.fillMaxHeight(.8f),
+                stepStyle = stepStyle
+            )
         }
 
         StepIndicator(
@@ -115,7 +124,9 @@ fun WalkThrough(
                     bottom.linkTo(parent.bottom)
                     width = Dimension.fillToConstraints
                 }
-                .padding(DimenTokens.LessLarge)
+                .padding(DimenTokens.LessLarge),
+            enter = slideInVertically(springAnimation()) { it },
+            exit = slideOutVertically { it } + fadeOut()
         ) {
             Button(onClick = {
                 if (!pagerState.canScrollForward) {
@@ -127,7 +138,7 @@ fun WalkThrough(
                 }
             }) {
                 Text(
-                    text =if (!pagerState.canScrollForward) "Get started" else "Next",
+                    text = if (!pagerState.canScrollForward) "Get started" else "Next",
                     modifier = Modifier.padding(vertical = DimenTokens.Small)
                 )
             }

@@ -1,9 +1,7 @@
 package com.enmanuelbergling.walkthrough.ui
 
 import androidx.compose.animation.animateColor
-import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateDp
-import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.core.updateTransition
 import androidx.compose.foundation.Canvas
@@ -17,6 +15,7 @@ import androidx.compose.ui.Modifier
 import com.enmanuelbergling.walkthrough.common.DimenTokens
 import com.enmanuelbergling.walkthrough.ui.components.IndicatorColors
 import com.enmanuelbergling.walkthrough.ui.components.IndicatorDefaults
+import com.enmanuelbergling.walkthrough.ui.components.springAnimation
 
 /**
  * @param pageIndex starts from 0
@@ -43,12 +42,7 @@ fun StepIndicator(
 
             val sizeAnimation by activeTransition.animateDp(
                 label = "size animation",
-                transitionSpec = {
-                    spring(
-                        Spring.DampingRatioLowBouncy,
-                        Spring.StiffnessLow
-                    )
-                }
+                transitionSpec = { springAnimation()}
             ) {
                 if (it) DimenTokens.MediumSmall
                 else DimenTokens.Small

@@ -6,7 +6,7 @@ import com.enmanuelbergling.walkthrough.model.WalkStep
 val WALK_STEPS = arrayListOf(
     WalkStep(
         R.drawable.ic_explore,
-        R.string.explore,
+        null,//R.string.explore,
         R.string.explore_description
     ),
     WalkStep(
