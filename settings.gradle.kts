@@ -15,3 +15,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "pbcompose"
 include(":app")
+include(":walkthrough")
