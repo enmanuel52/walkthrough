@@ -42,7 +42,8 @@ class MainActivity : ComponentActivity() {
                     ) { paddingValues ->
                         WalkThrough(
                             steps = WALK_STEPS,
-                            modifier = Modifier.padding(paddingValues)
+                            modifier = Modifier.padding(paddingValues),
+                            helperButton = true,
                         ) {
                             scope.launch {
                                 snackBarHost.showSnackbar(

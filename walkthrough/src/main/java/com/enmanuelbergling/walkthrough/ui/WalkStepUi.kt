@@ -4,8 +4,8 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -25,16 +25,16 @@ fun WalkStepUi(step: WalkStep, modifier: Modifier = Modifier) {
     Column(
         modifier
             .fillMaxWidth()
-            .fillMaxHeight(.6f)
-            .padding(horizontal = DimenTokens.Medium),
+            .padding(DimenTokens.Large),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceEvenly
     ) {
         Image(
             painter = painterResource(id = step.imageResource),
             contentDescription = stringResource(step.titleResource),
-            contentScale = ContentScale.Fit,
+            contentScale = ContentScale.FillBounds,
             modifier = Modifier
+                .fillMaxWidth()
                 .aspectRatio(1f)
         )
 
@@ -49,7 +49,7 @@ fun WalkStepUi(step: WalkStep, modifier: Modifier = Modifier) {
             style = MaterialTheme.typography.bodyMedium,
             fontWeight = FontWeight.Light,
             maxLines = 4,
-            overflow = TextOverflow.Ellipsis
+            overflow = TextOverflow.Ellipsis,
         )
     }
 }

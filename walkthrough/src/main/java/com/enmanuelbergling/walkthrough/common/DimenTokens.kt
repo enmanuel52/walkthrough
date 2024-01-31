@@ -17,4 +17,5 @@ internal object DimenTokens {
     val Giant: Dp = 64.dp
     val Huge: Dp = 96.dp
     val IndicatorWidth: Dp = 140.dp
+    val PageImage: Dp = 240.dp
 }
