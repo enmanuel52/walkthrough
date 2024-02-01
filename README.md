@@ -15,7 +15,7 @@ dependencyResolutionManagement {
 
 2- Second add the dependency in your build.gradle.kts
 ```
-implementation("io.github.enmanuel52:walkthrough:$latestVersion")
+implementation("io.github.enmanuel52:walkthrough:0.0.1")
 ```
 
 
