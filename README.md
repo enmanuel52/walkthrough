@@ -77,13 +77,3 @@ nextButtonVisible = true
     }
 }
 ```
-
-4- This is how it looks like with differents types of indicators, without the toggle button of course :)
-
-
-
-https://github.com/enmanuel52/walkthrough/assets/102194318/ebf9572e-d062-4416-aadd-b67a0bd81534
-
-
-
-
