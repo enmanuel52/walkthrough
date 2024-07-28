@@ -93,9 +93,8 @@ fun WalkThrough(
             )
         }
 
-        StepIndicator(
-            pageIndex = pagerState.currentPage,
-            pageCount = pagerState.pageCount,
+        ShiftIndicator(
+            pagerState,
             modifier = Modifier
                 .constrainAs(indicator) {
                     top.linkTo(bottomContentTop, margin = DimenTokens.Medium)
