@@ -1,6 +1,7 @@
 package com.enmanuelbergling.walkthrough.ui
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
@@ -31,6 +32,7 @@ import com.enmanuelbergling.walkthrough.ui.components.IndicatorDefaults
 import com.enmanuelbergling.walkthrough.ui.components.WalkThroughColors
 import com.enmanuelbergling.walkthrough.ui.components.WalkThroughDefaults
 import com.enmanuelbergling.walkthrough.ui.components.springAnimation
+import com.enmanuelbergling.walkthrough.ui.components.InstagramPager
 import kotlinx.coroutines.launch
 
 /**
@@ -70,7 +72,7 @@ fun WalkThrough(
 
         val bottomContentTop = createGuidelineFromTop(.7f)
 
-        HorizontalPager(
+        InstagramPager(
             state = pagerState, modifier = Modifier
                 .constrainAs(page) {
                     top.linkTo(parent.top)
@@ -81,10 +83,10 @@ fun WalkThrough(
                     width = Dimension.fillToConstraints
                 },
             verticalAlignment = Alignment.Top
-        ) { index ->
+        ) { index, pageModifier ->
             WalkStepUi(
                 step = steps[index],
-                modifier = Modifier
+                modifier = pageModifier
                     .fillMaxHeight(.7f)
                     .fillMaxWidth(),
                 stepStyle = stepStyle
@@ -137,7 +139,7 @@ fun WalkThrough(
                     onGetStarted()
                 } else {
                     scope.launch {
-                        pagerState.animateScrollToPage(pagerState.currentPage + 1)
+                        pagerState.animateScrollToPage(pagerState.currentPage + 1, animationSpec = tween(500))
                     }
                 }
             }) {
