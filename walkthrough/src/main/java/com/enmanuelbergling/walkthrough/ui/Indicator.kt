@@ -20,6 +20,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.unit.Dp
 import com.enmanuelbergling.walkthrough.common.DimenTokens
 import com.enmanuelbergling.walkthrough.ui.components.IndicatorColors
 import com.enmanuelbergling.walkthrough.ui.components.IndicatorDefaults
@@ -35,12 +37,14 @@ fun StepIndicator(
     pageIndex: Int,
     pageCount: Int,
     modifier: Modifier = Modifier,
+    spaceBetween: Dp = DimenTokens.VerySmall,
+    stepSize: Dp = DimenTokens.Small,
     colors: IndicatorColors = IndicatorDefaults.colors(),
 ) {
     Row(
         modifier,
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(DimenTokens.VerySmall)
+        horizontalArrangement = Arrangement.spacedBy(spaceBetween)
     ) {
         (0 until pageCount).forEach { currentPage ->
             val activeTransition =
@@ -53,8 +57,8 @@ fun StepIndicator(
                 label = "size animation",
                 transitionSpec = { springAnimation() }
             ) {
-                if (it) DimenTokens.MediumSmall
-                else DimenTokens.Small
+                if (it) stepSize.times(1.5f)
+                else stepSize
             }
 
             val colorAnimation by activeTransition.animateColor(
@@ -76,25 +80,28 @@ fun StepIndicator(
 fun ShiftIndicator(
     pagerState: PagerState,
     modifier: Modifier = Modifier,
+    spaceBetween: Dp = DimenTokens.VerySmall,
+    stepSize: Dp = DimenTokens.Small,
+    shape: Shape = CircleShape,
     colors: IndicatorColors = IndicatorDefaults.colors(),
 ) {
     Row(
         modifier,
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(DimenTokens.VerySmall)
+        horizontalArrangement = Arrangement.spacedBy(spaceBetween)
     ) {
         (0 until pagerState.pageCount).forEach { currentPage ->
             val widthAnimation by animateDpAsState(
                 targetValue =
-                DimenTokens.Small * pagerState.getPageProgress(currentPage).plus(1f),
+                stepSize * pagerState.getPageProgress(currentPage).plus(1f),
                 label = "width animation"
             )
 
             Box(
                 modifier = Modifier
-                    .height(DimenTokens.Small)
+                    .height(stepSize)
                     .width(widthAnimation)
-                    .background(colors.activeIndicatorColor, CircleShape)
+                    .background(colors.activeIndicatorColor, shape)
             )
         }
     }
