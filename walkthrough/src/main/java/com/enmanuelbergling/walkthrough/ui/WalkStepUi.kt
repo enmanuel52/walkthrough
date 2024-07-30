@@ -20,8 +20,11 @@ import com.enmanuelbergling.walkthrough.common.DimenTokens
 import com.enmanuelbergling.walkthrough.model.StepStyle
 import com.enmanuelbergling.walkthrough.model.WalkStep
 
+/**
+ * It just contains the image and text in specific screen
+ * */
 @Composable
-fun WalkStepUi(
+internal fun WalkStepUi(
     step: WalkStep,
     modifier: Modifier = Modifier,
     stepStyle: StepStyle = StepStyle.ImageUp,

@@ -3,7 +3,7 @@ package com.enmanuelbergling.walkthrough.common
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
-object DimenTokens {
+internal object DimenTokens {
     val One: Dp = 1.dp
     val SuperSmall: Dp = 2.dp
     val VerySmall: Dp = 4.dp
@@ -16,6 +16,5 @@ object DimenTokens {
     val ProfilePhoto: Dp = 56.dp
     val Giant: Dp = 64.dp
     val Huge: Dp = 96.dp
-    val IndicatorWidth: Dp = 140.dp
-    val PageImage: Dp = 240.dp
+    val IndicatorSize: Dp = 10.dp
 }
