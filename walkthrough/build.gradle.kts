@@ -46,6 +46,7 @@ dependencies {
     implementation(libs.androidx.compose.ui.ui.graphics)
     implementation(libs.androidx.compose.ui.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.compose.foundation)
 
     implementation(libs.androidx.constraintlayout.constraintlayout.compose)
 
@@ -59,7 +60,7 @@ publishing {
         register<MavenPublication>("maven") {
             groupId = "com.github.enmanuel52"
             artifactId = "walkthrough"
-            version = "1.1.1-alpha01"
+            version = "1.1.1-alpha02"
 
             afterEvaluate {
                 from(components["release"])
