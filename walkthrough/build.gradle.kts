@@ -1,8 +1,8 @@
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
-    `maven-publish`
     alias(libs.plugins.kotlin.compose.compiler)
+    `maven-publish`
 }
 
 android {
@@ -14,6 +14,12 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
+
+        project.configurations.configureEach {
+            resolutionStrategy {
+                force("androidx.compose.foundation:foundation:1.6.8")
+            }
+        }
     }
 
     buildTypes {
@@ -60,7 +66,7 @@ publishing {
         register<MavenPublication>("maven") {
             groupId = "com.github.enmanuel52"
             artifactId = "walkthrough"
-            version = "1.1.1-alpha02"
+            version = "1.1.1-alpha03"
 
             afterEvaluate {
                 from(components["release"])
