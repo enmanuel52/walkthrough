@@ -1,7 +1,6 @@
 package com.enmanuelbergling.walkthrough.ui
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
@@ -17,9 +16,7 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerScope
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.material3.Button
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -32,32 +29,23 @@ import com.enmanuelbergling.walkthrough.ui.components.IndicatorDefaults
 import com.enmanuelbergling.walkthrough.ui.components.WalkThroughColors
 import com.enmanuelbergling.walkthrough.ui.components.WalkThroughDefaults
 import com.enmanuelbergling.walkthrough.ui.components.springAnimation
-import com.enmanuelbergling.walkthrough.ui.components.InstagramPager
-import kotlinx.coroutines.launch
 
 /**
  * @param steps for every single page
  * @param colors for components
- * @param nextButtonVisible to scroll
- * @param nextButtonText text to react when ended or not
- * @param onGetStarted is launched once the user walk is finished
+ * @param bottomButton button placed at the bottom of the walk
  * */
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun WalkThrough(
     steps: List<WalkStep>,
+    pagerState: PagerState,
     modifier: Modifier = Modifier,
     skipButton: @Composable () -> Unit = { },
+    bottomButton: @Composable () -> Unit = {},
     colors: WalkThroughColors = WalkThroughDefaults.colors(),
-    nextButtonVisible: Boolean = false,
-    nextButtonText: @Composable (ended: Boolean) -> Unit = {},
     stepStyle: StepStyle = StepStyle.ImageUp,
-    onGetStarted: () -> Unit,
 ) {
-    val pagerState = rememberPagerState { steps.count() }
-
-    val scope = rememberCoroutineScope()
-
     ConstraintLayout(
         modifier = modifier
             .fillMaxSize()
@@ -72,7 +60,7 @@ fun WalkThrough(
 
         val bottomContentTop = createGuidelineFromTop(.7f)
 
-        InstagramPager(
+        HorizontalPager(
             state = pagerState, modifier = Modifier
                 .constrainAs(page) {
                     top.linkTo(parent.top)
@@ -83,10 +71,10 @@ fun WalkThrough(
                     width = Dimension.fillToConstraints
                 },
             verticalAlignment = Alignment.Top
-        ) { index, pageModifier ->
+        ) { index ->
             WalkStepUi(
                 step = steps[index],
-                modifier = pageModifier
+                modifier = Modifier
                     .fillMaxHeight(.7f)
                     .fillMaxWidth(),
                 stepStyle = stepStyle
@@ -108,44 +96,30 @@ fun WalkThrough(
             colors = colors.indicator()
         )
 
-        Box(modifier = Modifier
-            .constrainAs(
-                skipButtonRef
+        if (pagerState.canScrollForward) {
+            Box(modifier = Modifier
+                .constrainAs(
+                    skipButtonRef
+                ) {
+                    end.linkTo(parent.end)
+                    top.linkTo(parent.top)
+                }
+                .padding(DimenTokens.Small)
             ) {
-                end.linkTo(parent.end)
-                top.linkTo(parent.top)
+                skipButton()
             }
-            .padding(DimenTokens.Small)
-        ) {
-            skipButton()
         }
 
-        AnimatedVisibility(
-            visible = nextButtonVisible || !pagerState.canScrollForward,
+        Box(
             modifier = Modifier
                 .constrainAs(nextButton) {
                     top.linkTo(indicator.bottom)
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
                     bottom.linkTo(parent.bottom)
-                    width = Dimension.fillToConstraints
-                }
-                .padding(horizontal = DimenTokens.VeryLarge)
-                .padding(horizontal = DimenTokens.Medium),
-            enter = slideInVertically(springAnimation()) { it },
-            exit = slideOutVertically { it } + fadeOut()
+                },
         ) {
-            Button(onClick = {
-                if (!pagerState.canScrollForward) {
-                    onGetStarted()
-                } else {
-                    scope.launch {
-                        pagerState.animateScrollToPage(pagerState.currentPage + 1, animationSpec = tween(500))
-                    }
-                }
-            }) {
-                nextButtonText(!pagerState.canScrollForward)
-            }
+            bottomButton()
         }
     }
 }

@@ -57,7 +57,7 @@ fun StepIndicator(
                 label = "size animation",
                 transitionSpec = { springAnimation() }
             ) {
-                if (it) stepSize.times(1.5f)
+                if (it) stepSize.times(1.25f)
                 else stepSize
             }
 

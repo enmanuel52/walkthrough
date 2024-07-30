@@ -14,7 +14,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import com.enmanuelbergling.walkthrough.common.DimenTokens
@@ -35,7 +34,7 @@ fun WalkStepUi(
     ) {
         when (stepStyle) {
             StepStyle.ImageUp -> {
-                Image(step.imageResource, step.titleResource)
+                Image(step.imageResource)
 
                 Information(step.titleResource, step.descriptionResource)
             }
@@ -43,17 +42,17 @@ fun WalkStepUi(
             StepStyle.ImageDown -> {
                 Information(step.titleResource, step.descriptionResource)
 
-                Image(step.imageResource, step.titleResource)
+                Image(step.imageResource)
             }
         }
     }
 }
 
 @Composable
-private fun Image(resource: Int, title: Int?) {
+private fun Image(resource: Int) {
     Image(
         painter = painterResource(id = resource),
-        contentDescription = title?.let { stringResource(title) },
+        contentDescription = null,
         contentScale = ContentScale.FillBounds,
         modifier = Modifier
             .fillMaxWidth()
@@ -62,21 +61,20 @@ private fun Image(resource: Int, title: Int?) {
 }
 
 @Composable
-private fun Information(title: Int?, description: Int) {
+private fun Information(title: String?, description: String) {
     title?.let {
         Text(
-            text = stringResource(id = title),
+            text = title,
             style = MaterialTheme.typography.titleLarge,
             fontWeight = FontWeight.SemiBold,
         )
     }
 
     Text(
-        text = stringResource(id = description),
+        text = description,
         style = if (title != null)
             MaterialTheme.typography.bodyMedium
         else LocalTextStyle.current,
-        maxLines = 4,
         overflow = TextOverflow.Ellipsis,
     )
 }
