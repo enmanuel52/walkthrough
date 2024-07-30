@@ -12,7 +12,7 @@ import kotlin.math.abs
  * @return a value between 0f and 1f
  * */
 @OptIn(ExperimentalFoundationApi::class)
-fun PagerState.getPageProgress(index: Int): Float = if (currentPage == index) {
+internal fun PagerState.getPageProgress(index: Int): Float = if (currentPage == index) {
     1 - abs(currentPageOffsetFraction)
 } else if (currentPageOffsetFraction > 0f && index == currentPage + 1) {
     currentPageOffsetFraction
@@ -23,7 +23,7 @@ fun PagerState.getPageProgress(index: Int): Float = if (currentPage == index) {
 }
 
 @Composable
-fun <T> springAnimation(): SpringSpec<T> =
+internal fun <T> springAnimation(): SpringSpec<T> =
     spring(
         Spring.DampingRatioLowBouncy,
         Spring.StiffnessLow

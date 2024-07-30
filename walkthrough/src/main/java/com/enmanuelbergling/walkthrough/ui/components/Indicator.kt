@@ -1,9 +1,10 @@
-package com.enmanuelbergling.walkthrough.ui
+@file:OptIn(ExperimentalFoundationApi::class)
+
+package com.enmanuelbergling.walkthrough.ui.components
 
 import androidx.compose.animation.animateColor
 import androidx.compose.animation.core.animateDp
 import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.animation.core.tween
 import androidx.compose.animation.core.updateTransition
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -12,6 +13,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.PagerState
@@ -23,10 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.Dp
 import com.enmanuelbergling.walkthrough.common.DimenTokens
-import com.enmanuelbergling.walkthrough.ui.components.IndicatorColors
-import com.enmanuelbergling.walkthrough.ui.components.IndicatorDefaults
-import com.enmanuelbergling.walkthrough.ui.components.getPageProgress
-import com.enmanuelbergling.walkthrough.ui.components.springAnimation
+import com.enmanuelbergling.walkthrough.model.IndicatorStyle
 
 /**
  * @param pageIndex starts from 0
@@ -75,7 +74,6 @@ fun StepIndicator(
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ShiftIndicator(
     pagerState: PagerState,
@@ -102,6 +100,35 @@ fun ShiftIndicator(
                     .height(stepSize)
                     .width(widthAnimation)
                     .background(colors.activeIndicatorColor, shape)
+            )
+        }
+    }
+}
+
+@Composable
+internal fun Indicator(
+    indicatorStyle: IndicatorStyle,
+    pagerState: PagerState,
+    modifier: Modifier = Modifier,
+    colors: IndicatorColors,
+) {
+    when (indicatorStyle) {
+        IndicatorStyle.Step -> {
+            StepIndicator(
+                pageIndex = pagerState.currentPage,
+                pageCount = pagerState.pageCount,
+                stepSize = DimenTokens.IndicatorSize,
+                modifier = modifier.padding(DimenTokens.LessLarge),
+                colors = colors
+            )
+        }
+
+        IndicatorStyle.Shift -> {
+            ShiftIndicator(
+                pagerState,
+                stepSize = DimenTokens.IndicatorSize,
+                modifier = modifier.padding(DimenTokens.LessLarge),
+                colors = colors
             )
         }
     }

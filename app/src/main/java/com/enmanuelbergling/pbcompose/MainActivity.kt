@@ -18,6 +18,8 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
@@ -99,5 +101,12 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+    }
+}
+
+@Composable
+internal fun SkipButton(modifier: Modifier = Modifier, onClick: () -> Unit) {
+    TextButton(onClick = onClick, modifier) {
+        Text(text = "Skip")
     }
 }
