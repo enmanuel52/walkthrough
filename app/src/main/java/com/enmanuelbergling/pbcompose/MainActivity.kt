@@ -30,7 +30,6 @@ import com.enmanuelbergling.pbcompose.data.WALK_STEPS
 import com.enmanuelbergling.pbcompose.ui.theme.PbcomposeTheme
 import com.enmanuelbergling.walkthrough.model.WalkScrollStyle
 import com.enmanuelbergling.walkthrough.ui.WalkThrough
-import com.enmanuelbergling.walkthrough.ui.components.SkipButton
 import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {

@@ -85,7 +85,11 @@ fun WalkThrough(
                 }, verticalAlignment = Alignment.Top
             ) { index ->
                 WalkStepUi(
-                    step = steps[index], modifier = Modifier.fillMaxSize(), stepStyle = stepStyle
+                    step = steps[index],
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(DimenTokens.MediumSmall),
+                    stepStyle = stepStyle
                 )
             }
 
@@ -103,18 +107,17 @@ fun WalkThrough(
                 colors = colors.indicator()
             )
 
-            AnimatedVisibility(pagerState.canScrollForward) {
-                Box(modifier = Modifier
-                    .constrainAs(
-                        skipButtonRef
-                    ) {
-                        end.linkTo(parent.end)
-                        top.linkTo(parent.top)
-                    }
-                    .padding(DimenTokens.Small)) {
-                    skipButton()
+            AnimatedVisibility(pagerState.canScrollForward, modifier = Modifier
+                .constrainAs(
+                    skipButtonRef
+                ) {
+                    end.linkTo(parent.end)
+                    top.linkTo(parent.top)
                 }
+                .padding(DimenTokens.Small)) {
+                skipButton()
             }
+
 
             Box(
                 modifier = Modifier.constrainAs(nextButton) {
@@ -183,17 +186,15 @@ internal fun FilledWalkStepUi(
             colors = colors.indicator()
         )
 
-        AnimatedVisibility(pagerState.canScrollForward) {
-            Box(modifier = Modifier
-                .constrainAs(
-                    skipButtonRef
-                ) {
-                    end.linkTo(parent.end)
-                    top.linkTo(parent.top)
-                }
-                .padding(DimenTokens.Small)) {
-                skipButton()
+        AnimatedVisibility(pagerState.canScrollForward, modifier = Modifier
+            .constrainAs(
+                skipButtonRef
+            ) {
+                end.linkTo(parent.end)
+                top.linkTo(parent.top)
             }
+            .padding(DimenTokens.Small)) {
+            skipButton()
         }
 
         Box(
