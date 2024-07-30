@@ -45,10 +45,13 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+    lint {
+        checkReleaseBuilds = false
+    }
 }
 
 dependencies {
-//    implementation("com.github.enmanuel52:walkthrough:1.0.2")
+//    implementation(libs.walkthrough)
     implementation(project(":walkthrough"))
 
     implementation(libs.androidx.core.core.splashscreen)

@@ -38,9 +38,6 @@ fun InstagramPager(
     pageSpacing: Dp = 0.dp,
     verticalAlignment: Alignment.Vertical = Alignment.Top,
     userScrollEnabled: Boolean = true,
-    pageNestedScrollConnection: NestedScrollConnection = remember(state) {
-        PagerDefaults.pageNestedScrollConnection(state, Orientation.Horizontal)
-    },
     pageContent: @Composable (index: Int, pageModifier: Modifier) -> Unit,
 ) {
 
@@ -52,7 +49,6 @@ fun InstagramPager(
         pageSize = pageSize,
         pageSpacing = pageSpacing,
         userScrollEnabled = userScrollEnabled,
-        pageNestedScrollConnection = pageNestedScrollConnection
     ) { pageIndex ->
 
         val degreesIn by remember(state.currentPageOffsetFraction) {

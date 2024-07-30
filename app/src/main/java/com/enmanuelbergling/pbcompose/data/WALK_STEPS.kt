@@ -40,7 +40,7 @@ data class WalkStepRes(
 ) {
     fun toModel(context: Context) = WalkStep(
         imageResource = imageResource,
-        titleResource = titleResource?.let { context.getString(it) },
-        descriptionResource = context.getString(descriptionResource),
+        title = titleResource?.let { context.getString(it) },
+        description = context.getString(descriptionResource),
     )
 }

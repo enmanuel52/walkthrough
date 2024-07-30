@@ -39,11 +39,11 @@ internal fun WalkStepUi(
             StepStyle.ImageUp -> {
                 Image(step.imageResource)
 
-                Information(step.titleResource, step.descriptionResource)
+                Information(step.title, step.description)
             }
 
             StepStyle.ImageDown -> {
-                Information(step.titleResource, step.descriptionResource)
+                Information(step.title, step.description)
 
                 Image(step.imageResource)
             }
