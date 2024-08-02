@@ -1,46 +1,21 @@
 package com.enmanuelbergling.pbcompose.data
 
-import android.content.Context
-import androidx.annotation.DrawableRes
 import com.enmanuelbergling.pbcompose.R
 import com.enmanuelbergling.walkthrough.model.WalkStep
 
-val WALK_STEPS = arrayListOf(
-    WalkStepRes(
-        R.drawable.ic_explore,
-        null,//R.string.explore,
-        R.string.explore_description
-    ),
-    WalkStepRes(
-        R.drawable.ic_booking,
-        R.string.bookings,
-        R.string.bookings_description
-    ),
-    WalkStepRes(
-        imageResource = R.drawable.ic_wizard_payment,
-        titleResource = R.string.pay,
-        descriptionResource = R.string.pay_description
-    ),
-    WalkStepRes(
-        R.drawable.ic_wizard_waiting_room,
-        R.string.waiting_room,
-        R.string.waiting_room_description
-    ),
-    WalkStepRes(
-        R.drawable.ic_notifications,
-        R.string.notifications,
-        R.string.notifications_description
-    ),
+val IMAGES = listOf(
+    R.drawable.ic_explore,
+    R.drawable.ic_booking,
+    R.drawable.ic_wizard_payment,
+    R.drawable.ic_wizard_waiting_room,
+    R.drawable.ic_notifications,
 )
 
-data class WalkStepRes(
-    @DrawableRes val imageResource: Int,
-    val titleResource: Int? = null,
-    val descriptionResource: Int,
-) {
-    fun toModel(context: Context) = WalkStep(
-        imageResource = imageResource,
-        title = titleResource?.let { context.getString(it) },
-        description = context.getString(descriptionResource),
+private const val LOREM_IPSUM =
+    "Lorem ipsum odor amet, consectetuer adipiscing elit. Scelerisque dis metus parturient viverra enim. Quisque nostra dui metus eget viverra posuere nulla quisque. Auctor senectus blandit eros facilisi parturient risus volutpat curabitur."
+
+val WALK_STEPS = IMAGES.map {
+    WalkStep(
+        it, description = LOREM_IPSUM
     )
 }

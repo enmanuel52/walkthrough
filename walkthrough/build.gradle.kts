@@ -14,12 +14,6 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
-
-        project.configurations.configureEach {
-            resolutionStrategy {
-                force("androidx.compose.foundation:foundation:1.6.8")
-            }
-        }
     }
 
     buildTypes {

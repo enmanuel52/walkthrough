@@ -6,6 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -20,14 +21,18 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.enmanuelbergling.pbcompose.data.WALK_STEPS
 import com.enmanuelbergling.pbcompose.ui.theme.PbcomposeTheme
+import com.enmanuelbergling.walkthrough.model.IndicatorStyle
 import com.enmanuelbergling.walkthrough.model.WalkScrollStyle
 import com.enmanuelbergling.walkthrough.ui.WalkThrough
 import kotlinx.coroutines.launch
@@ -45,57 +50,78 @@ class MainActivity : ComponentActivity() {
             val scope = rememberCoroutineScope()
             val context = LocalContext.current
 
+            var scrollStyle by remember { mutableStateOf(WalkScrollStyle.Instagram) }
+
             PbcomposeTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
                 ) {
-                    Scaffold(snackbarHost = { SnackbarHost(snackBarHost) }) { paddingValues ->
+                    Scaffold(
+                        snackbarHost = { SnackbarHost(snackBarHost) }
+                    ) { paddingValues ->
                         val pagerState = rememberPagerState { WALK_STEPS.count() }
 
-                        WalkThrough(
-                            steps = WALK_STEPS.map { it.toModel(context) },
-                            pagerState = pagerState,
-                            modifier = Modifier.padding(paddingValues),
-                            bottomButton = {
-                                Button(
-                                    onClick = {
-                                        scope.launch {
-                                            if (pagerState.canScrollForward) {
-                                                pagerState.animateScrollToPage(
-                                                    pagerState.currentPage + 1,
-                                                    animationSpec = tween(500)
-                                                )
+                        Box(modifier = Modifier.padding(paddingValues)) {
+                            WalkThrough(
+                                steps = WALK_STEPS,
+                                pagerState = pagerState,
+                                bottomButton = {
+                                    Button(
+                                        onClick = {
+                                            scope.launch {
+                                                if (pagerState.canScrollForward) {
+                                                    pagerState.animateScrollToPage(
+                                                        pagerState.currentPage + 1,
+                                                        animationSpec = tween(500)
+                                                    )
 
+                                                } else {
+                                                    snackBarHost.showSnackbar(
+                                                        "The walk has ended",
+                                                        withDismissAction = true
+                                                    )
+                                                }
+                                            }
+                                        },
+                                        modifier = Modifier.fillMaxWidth(.7f),
+                                        contentPadding = PaddingValues(vertical = 8.dp)
+                                    ) {
+                                        AnimatedContent(
+                                            targetState = pagerState.canScrollForward,
+                                            label = "text button animation"
+                                        ) { forward ->
+                                            if (forward) {
+                                                Text(text = "Next")
                                             } else {
-                                                snackBarHost.showSnackbar("The walk has ended")
+                                                Text(text = "Get started")
                                             }
                                         }
-                                    },
-                                    modifier = Modifier.fillMaxWidth(.7f),
-                                    contentPadding = PaddingValues(vertical = 8.dp)
-                                ) {
-                                    AnimatedContent(
-                                        targetState = pagerState.canScrollForward,
-                                        label = "text button animation"
-                                    ) { forward ->
-                                        if (forward) {
-                                            Text(text = "Next")
-                                        } else {
-                                            Text(text = "Get started")
+                                    }
+                                },
+                                skipButton = {
+                                    SkipButton {
+                                        scope.launch {
+                                            snackBarHost.showSnackbar(
+                                                "The walk has been skipped",
+                                                withDismissAction = true
+                                            )
                                         }
                                     }
+                                },
+                                scrollStyle = scrollStyle,
+                                indicatorStyle = IndicatorStyle.Shift
+                            )
+
+                            TextButton(onClick = {
+                                scrollStyle = when (scrollStyle) {
+                                    WalkScrollStyle.Normal -> WalkScrollStyle.Instagram
+                                    WalkScrollStyle.Instagram -> WalkScrollStyle.Normal
                                 }
-                            },
-                            skipButton = {
-                                SkipButton {
-                                    scope.launch {
-                                        snackBarHost.showSnackbar("The walk has been skipped")
-                                    }
-                                }
-                            },
-                            scrollStyle = WalkScrollStyle.Instagram
-                        )
+                            }, modifier = Modifier.padding(8.dp)) {
+                                Text(text = "Change style")
+                            }
+                        }
                     }
                 }
             }

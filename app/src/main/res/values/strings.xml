@@ -1,16 +1,3 @@
 <resources>
     <string name="app_name">Walkthrough</string>
-
-    <!-- Walkthrough -->
-    <string name="explore_description">Find what your\'re looking for, manage your priorities and share your opinion.</string>
-    <string name="bookings_description">Get tickets remotely at the establishments of your choice, save your time.</string>
-    <string name="notifications_description">Receive notifications, information and alerts. Stay informed of what\'s going on with your tickets.</string>
-    <string name="waiting_room_description">In case there are no capacities to be attended, there is the possibility to enter a waiting room, you will be notified of the availability as soon as possible.</string>
-    <string name="pay_description">You will be able to make payments through some platform, fast an secure.</string>
-    <string name="explore">Explore</string>
-    <string name="pay">Pay</string>
-    <string name="base_name_slide_2">Tickets</string>
-    <string name="bookings">Bookings</string>
-    <string name="notifications">Notifications</string>
-    <string name="waiting_room">Waiting Room\n</string>
 </resources>
