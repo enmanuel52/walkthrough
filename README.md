@@ -16,7 +16,7 @@ dependencyResolutionManagement {
 
 2- Second add the dependency in your build.gradle.kts
 ```
-implementation("io.github.enmanuel52:walkthrough:1.1.1-alpha03")
+implementation("io.github.enmanuel52:walkthrough:1.1.1-beta01")
 ```
 
 
@@ -85,7 +85,7 @@ WalkThrough(
             }
         }
     },
-    scrollStyle = WalkScrollStyle.Instagram
+    scrollStyle = WalkScrollStyle.Instagram(boxAngle = 20f)
 )
 ```
 
