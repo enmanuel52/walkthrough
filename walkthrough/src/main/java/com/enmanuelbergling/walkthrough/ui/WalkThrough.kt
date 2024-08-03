@@ -1,4 +1,3 @@
-@file:OptIn(ExperimentalFoundationApi::class)
 
 package com.enmanuelbergling.walkthrough.ui
 
@@ -34,6 +33,7 @@ import com.enmanuelbergling.walkthrough.ui.components.WalkThroughDefaults
  * @param scrollStyle define how the scroll behaves
  * @param colors for components
  * */
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun WalkThrough(
     steps: List<WalkStep>,
@@ -46,8 +46,13 @@ fun WalkThrough(
     scrollStyle: WalkScrollStyle = WalkScrollStyle.Normal,
     colors: WalkThroughColors = WalkThroughDefaults.colors(),
 ) {
-    if (scrollStyle == WalkScrollStyle.Instagram) {
-        InstagramPager(state = pagerState, modifier = modifier) { index, pageModifier ->
+    if (scrollStyle is WalkScrollStyle.Instagram) {
+        InstagramPager(
+            state = pagerState,
+            modifier = modifier,
+            boxAngle = scrollStyle.boxAngle,
+            reverse = scrollStyle.reverse,
+        ) { index, pageModifier ->
             FilledWalkStepUi(
                 step = steps[index],
                 pagerState = pagerState,
@@ -136,6 +141,7 @@ fun WalkThrough(
 /**
  * All is on the page, even indicator and button
  * */
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 internal fun FilledWalkStepUi(
     step: WalkStep,

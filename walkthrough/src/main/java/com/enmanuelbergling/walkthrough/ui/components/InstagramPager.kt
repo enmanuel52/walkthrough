@@ -1,11 +1,9 @@
 package com.enmanuelbergling.walkthrough.ui.components
 
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PageSize
-import androidx.compose.foundation.pager.PagerDefaults
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
@@ -15,7 +13,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import kotlin.math.abs
@@ -23,6 +20,7 @@ import kotlin.math.abs
 /**
  * Working onto [HorizontalPager] under the hood
  * @param state of pager
+ * @param boxAngle around the rotation is performed
  * @param reverse to define whether you are in or out of the cube
  * @param pageContent the content of the page, you must use this modifier in its page to ensure
  * the instagram effect
@@ -32,6 +30,7 @@ import kotlin.math.abs
 fun InstagramPager(
     state: PagerState,
     modifier: Modifier = Modifier,
+    boxAngle: Int = 30,
     reverse: Boolean = false,
     contentPadding: PaddingValues = PaddingValues(0.dp),
     pageSize: PageSize = PageSize.Fill,
@@ -54,23 +53,24 @@ fun InstagramPager(
         val degreesIn by remember(state.currentPageOffsetFraction) {
             derivedStateOf {
                 if (pageIndex == state.currentPage) {
-                    state.currentPageOffsetFraction * 90
+                    state.currentPageOffsetFraction * boxAngle
                 } else if (pageIndex > state.currentPage) {
-                    -90 + abs(state.currentPageOffsetFraction * 90)
+                    -boxAngle + abs(state.currentPageOffsetFraction * boxAngle)
                 } else {
-                    90 - abs(state.currentPageOffsetFraction * 90)
+                    boxAngle - abs(state.currentPageOffsetFraction * boxAngle)
                 }
             }
         }
 
+        //alike instagram
         val degreesOut by remember(state.currentPageOffsetFraction) {
             derivedStateOf {
                 if (pageIndex == state.currentPage) {
-                    -state.currentPageOffsetFraction * 90
+                    -state.currentPageOffsetFraction * boxAngle
                 } else if (pageIndex < state.currentPage) {
-                    -90 + abs(state.currentPageOffsetFraction * 90)
+                    -boxAngle + abs(state.currentPageOffsetFraction * boxAngle)
                 } else {
-                    90 - abs(state.currentPageOffsetFraction * 90)
+                    boxAngle - abs(state.currentPageOffsetFraction * boxAngle)
                 }
             }
         }
