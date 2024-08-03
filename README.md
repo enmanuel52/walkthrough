@@ -96,7 +96,8 @@ InstagramPager(state = pagerState) {index, pageModifier->
 ```
 
 
-https://github.com/user-attachments/assets/76047091-54de-4bb7-8647-53815568bb43
+https://github.com/user-attachments/assets/c9a1322e-fb6a-4e33-98ba-fae34e5d09ba
+
 
 
 ## Louder effect
@@ -106,7 +107,9 @@ InstagramPager(state = pagerState, boxAngle = 70) {index, pageModifier->
 }
 ```
 
-https://github.com/user-attachments/assets/760594b5-ab79-403e-acf8-3e5197b7a031
+
+
+https://github.com/user-attachments/assets/9292ded7-8121-4028-8bdb-2b7472e36541
 
 
 ## Reverse
@@ -117,7 +120,9 @@ InstagramPager(state = pagerState, reverse = true) {index, pageModifier->
 ```
 
 
-https://github.com/user-attachments/assets/48ca4565-fb44-4729-a80d-345a6d610f28
+
+https://github.com/user-attachments/assets/64a31eae-eee0-4f85-933e-dcb55a40790c
+
 
 
 ## Shift indicator
