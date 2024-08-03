@@ -23,43 +23,20 @@ implementation("io.github.enmanuel52:walkthrough:1.1.1-alpha03")
 3- You need a list of pages
 
 ```
-val WALK_STEPS = arrayListOf(
-    WalkStepRes(
-        R.drawable.ic_explore,
-        null,//R.string.explore,
-        R.string.explore_description
-    ),
-    WalkStepRes(
-        R.drawable.ic_booking,
-        R.string.bookings,
-        R.string.bookings_description
-    ),
-    WalkStepRes(
-        imageResource = R.drawable.ic_wizard_payment,
-        titleResource = R.string.pay,
-        descriptionResource = R.string.pay_description
-    ),
-    WalkStepRes(
-        R.drawable.ic_wizard_waiting_room,
-        R.string.waiting_room,
-        R.string.waiting_room_description
-    ),
-    WalkStepRes(
-        R.drawable.ic_notifications,
-        R.string.notifications,
-        R.string.notifications_description
-    ),
+val IMAGES = listOf(
+    R.drawable.ic_explore,
+    R.drawable.ic_booking,
+    R.drawable.ic_wizard_payment,
+    R.drawable.ic_wizard_waiting_room,
+    R.drawable.ic_notifications,
 )
 
-data class WalkStepRes(
-    @DrawableRes val imageResource: Int,
-    val titleResource: Int? = null,
-    val descriptionResource: Int,
-) {
-    fun toModel(context: Context) = WalkStep(
-        imageResource = imageResource,
-        title = titleResource?.let { context.getString(it) },
-        description = context.getString(descriptionResource),
+private const val LOREM_IPSUM =
+    "Lorem ipsum odor amet, consectetuer adipiscing elit. Scelerisque dis metus parturient viverra enim. Quisque nostra dui metus eget viverra posuere nulla quisque. Auctor senectus blandit eros facilisi parturient risus volutpat curabitur."
+
+val WALK_STEPS = IMAGES.map {
+    WalkStep(
+        it, description = LOREM_IPSUM
     )
 }
 ```
@@ -68,7 +45,7 @@ data class WalkStepRes(
 
 ```
 WalkThrough(
-    steps = WALK_STEPS.map { it.toModel(context) },
+    steps = WALK_STEPS,
     pagerState = pagerState,
     modifier = Modifier.padding(paddingValues),
     bottomButton = {
