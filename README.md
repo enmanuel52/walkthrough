@@ -141,3 +141,6 @@ java.lang.NoSuchMethodError: No static method HorizontalPager-xYaah8o(Landroidx/
                                                                                                     	at com.enmanuelbergling.walkthrough.ui.WalkThroughKt$WalkThrough$$inlined$ConstraintLayout$2.invoke(ConstraintLayout.kt:89)
 
 ```
+
+## How to solve
+_Copy and Paste the files related to HorizontalPager in you project_ [InstagramPager](https://github.com/enmanuel52/walkthrough/blob/master/walkthrough/src/main/java/com/enmanuelbergling/walkthrough/ui/components/InstagramPager.kt) and [Walkthrough](https://github.com/enmanuel52/walkthrough/blob/master/walkthrough/src/main/java/com/enmanuelbergling/walkthrough/ui/WalkThrough.kt)
