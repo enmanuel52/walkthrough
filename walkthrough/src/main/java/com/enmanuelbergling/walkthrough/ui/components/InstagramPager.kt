@@ -1,5 +1,6 @@
 package com.enmanuelbergling.walkthrough.ui.components
 
+import androidx.annotation.IntRange
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.pager.HorizontalPager
@@ -20,7 +21,7 @@ import kotlin.math.abs
 /**
  * Working onto [HorizontalPager] under the hood
  * @param state of pager
- * @param boxAngle around the rotation is performed
+ * @param boxAngle around the rotation is performed, the bigger the value the louder the effect
  * @param reverse to define whether you are in or out of the cube
  * @param pageContent the content of the page, you must use this modifier in its page to ensure
  * the instagram effect
@@ -30,7 +31,7 @@ import kotlin.math.abs
 fun InstagramPager(
     state: PagerState,
     modifier: Modifier = Modifier,
-    boxAngle: Int = 30,
+    @IntRange(10, 90) boxAngle: Int = 30,
     reverse: Boolean = false,
     contentPadding: PaddingValues = PaddingValues(0.dp),
     pageSize: PageSize = PageSize.Fill,
