@@ -15,7 +15,7 @@ dependencyResolutionManagement {
 
 2- Second add the dependency in your build.gradle.kts
 ```
-implementation("io.github.enmanuel52:walkthrough:1.1.2")
+implementation("io.github.enmanuel52:walkthrough:1.1.4")
 ```
 
 
@@ -96,7 +96,8 @@ InstagramPager(state = pagerState) {index, pageModifier->
 ```
 
 
-https://github.com/user-attachments/assets/76047091-54de-4bb7-8647-53815568bb43
+https://github.com/user-attachments/assets/c9a1322e-fb6a-4e33-98ba-fae34e5d09ba
+
 
 
 ## Louder effect
@@ -106,7 +107,9 @@ InstagramPager(state = pagerState, boxAngle = 70) {index, pageModifier->
 }
 ```
 
-https://github.com/user-attachments/assets/760594b5-ab79-403e-acf8-3e5197b7a031
+
+
+https://github.com/user-attachments/assets/9292ded7-8121-4028-8bdb-2b7472e36541
 
 
 ## Reverse
@@ -117,7 +120,9 @@ InstagramPager(state = pagerState, reverse = true) {index, pageModifier->
 ```
 
 
-https://github.com/user-attachments/assets/48ca4565-fb44-4729-a80d-345a6d610f28
+
+https://github.com/user-attachments/assets/64a31eae-eee0-4f85-933e-dcb55a40790c
+
 
 
 ## Shift indicator
@@ -136,3 +141,6 @@ java.lang.NoSuchMethodError: No static method HorizontalPager-xYaah8o(Landroidx/
                                                                                                     	at com.enmanuelbergling.walkthrough.ui.WalkThroughKt$WalkThrough$$inlined$ConstraintLayout$2.invoke(ConstraintLayout.kt:89)
 
 ```
+
+## How to solve
+_Copy and Paste the files related to HorizontalPager in you project_ [InstagramPager](https://github.com/enmanuel52/walkthrough/blob/master/walkthrough/src/main/java/com/enmanuelbergling/walkthrough/ui/components/InstagramPager.kt) and [Walkthrough](https://github.com/enmanuel52/walkthrough/blob/master/walkthrough/src/main/java/com/enmanuelbergling/walkthrough/ui/WalkThrough.kt)
