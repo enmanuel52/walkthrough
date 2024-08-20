@@ -1,4 +1,3 @@
-
 package com.enmanuelbergling.walkthrough.ui
 
 import androidx.compose.animation.AnimatedVisibility
@@ -42,7 +41,7 @@ fun WalkThrough(
     skipButton: @Composable () -> Unit = { },
     bottomButton: @Composable () -> Unit = {},
     stepStyle: StepStyle = StepStyle.ImageUp,
-    indicatorStyle: IndicatorStyle = IndicatorStyle.Step,
+    indicatorStyle: IndicatorStyle = IndicatorStyle.Step(),
     scrollStyle: WalkScrollStyle = WalkScrollStyle.Normal,
     colors: WalkThroughColors = WalkThroughDefaults.colors(),
 ) {
@@ -151,7 +150,7 @@ internal fun FilledWalkStepUi(
     bottomButton: @Composable () -> Unit = {},
     colors: WalkThroughColors = WalkThroughDefaults.colors(),
     stepStyle: StepStyle = StepStyle.ImageUp,
-    indicatorStyle: IndicatorStyle = IndicatorStyle.Shift,
+    indicatorStyle: IndicatorStyle = IndicatorStyle.Shift(),
 ) {
     ConstraintLayout(
         modifier = modifier

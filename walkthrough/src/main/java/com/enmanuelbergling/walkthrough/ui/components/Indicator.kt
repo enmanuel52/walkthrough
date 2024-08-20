@@ -122,15 +122,25 @@ internal fun Indicator(
     colors: IndicatorColors,
 ) {
     when (indicatorStyle) {
-        IndicatorStyle.Step -> {
+        is IndicatorStyle.Step -> {
             StepIndicator(
-                pagerState = pagerState, modifier = modifier.padding(DimenTokens.LessLarge), colors = colors
+                pagerState = pagerState,
+                modifier = modifier.padding(DimenTokens.LessLarge),
+                spaceBetween = indicatorStyle.spaceBetween,
+                stepSize = indicatorStyle.stepSize,
+                shape = indicatorStyle.shape,
+                colors = colors,
             )
         }
 
-        IndicatorStyle.Shift -> {
+        is IndicatorStyle.Shift -> {
             ShiftIndicator(
-                pagerState, modifier = modifier.padding(DimenTokens.LessLarge), colors = colors
+                pagerState,
+                modifier = modifier.padding(DimenTokens.LessLarge),
+                spaceBetween = indicatorStyle.spaceBetween,
+                stepSize = indicatorStyle.stepSize,
+                shape = indicatorStyle.shape,
+                colors = colors,
             )
         }
     }
