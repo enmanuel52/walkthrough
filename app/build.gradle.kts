@@ -51,8 +51,8 @@ android {
 }
 
 dependencies {
-    implementation(libs.walkthrough)
-//    implementation(project(":walkthrough"))
+//    implementation(libs.walkthrough)
+    implementation(project(":walkthrough"))
 
     implementation(libs.androidx.core.core.splashscreen)
 

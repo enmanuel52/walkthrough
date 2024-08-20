@@ -129,7 +129,7 @@ fun WalkthroughSample() {
                     }
                 },
                 scrollStyle = scrollStyle,
-                indicatorStyle = IndicatorStyle.Shift
+                indicatorStyle = IndicatorStyle.Step
             )
 
             ScrollStyleOptions(

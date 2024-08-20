@@ -2,13 +2,10 @@
 
 package com.enmanuelbergling.walkthrough.ui.components
 
-import androidx.compose.animation.animateColor
-import androidx.compose.animation.core.animateDp
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.animation.core.updateTransition
-import androidx.compose.foundation.Canvas
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -22,22 +19,26 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.unit.Dp
 import com.enmanuelbergling.walkthrough.common.DimenTokens
 import com.enmanuelbergling.walkthrough.model.IndicatorStyle
 
 /**
- * @param pageIndex starts from 0
+ * @param pagerState is required to handle the exact state
  * @param colors for dots
  * */
 @Composable
 fun StepIndicator(
-    pageIndex: Int,
-    pageCount: Int,
+    pagerState: PagerState,
     modifier: Modifier = Modifier,
-    spaceBetween: Dp = DimenTokens.VerySmall,
-    stepSize: Dp = DimenTokens.Small,
+    spaceBetween: Dp = DimenTokens.IndicatorSize,
+    stepSize: Dp = DimenTokens.IndicatorSize,
+    shape: Shape = CircleShape,
     colors: IndicatorColors = IndicatorDefaults.colors(),
 ) {
     Row(
@@ -45,31 +46,31 @@ fun StepIndicator(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(spaceBetween)
     ) {
-        (0 until pageCount).forEach { currentPage ->
-            val activeTransition =
-                updateTransition(
-                    targetState = pageIndex == currentPage,
-                    label = "active transition animation"
-                )
+        (0 until pagerState.pageCount).forEach { currentPage ->
+            val scaleAnimation by animateFloatAsState(
+                targetValue = pagerState.getPageProgress(currentPage).plus(1f),
+                label = "width animation",
+            )
 
-            val sizeAnimation by activeTransition.animateDp(
-                label = "size animation",
-                transitionSpec = { springAnimation() }
-            ) {
-                if (it) stepSize.times(1.25f)
-                else stepSize
-            }
+            val color by animateColorAsState(
+                targetValue = lerp(
+                    start = colors.inactiveIndicatorColor,
+                    stop = colors.activeIndicatorColor,
+                    fraction = pagerState.getPageProgress(currentPage)
+                ), label = "color animation"
+            )
 
-            val colorAnimation by activeTransition.animateColor(
-                label = "color animation",
-            ) { active ->
-                if (active) colors.activeIndicatorColor
-                else colors.inactiveIndicatorColor
-            }
+            Box(modifier = Modifier
+                .size(stepSize)
+                .graphicsLayer {
+                    scaleX = scaleAnimation
+                    scaleY = scaleAnimation
+                }
+                .clip(shape)
+                .drawBehind {
+                    drawRect(color)
+                })
 
-            Canvas(modifier = Modifier.size(sizeAnimation)) {
-                drawCircle(colorAnimation)
-            }
         }
     }
 }
@@ -78,8 +79,8 @@ fun StepIndicator(
 fun ShiftIndicator(
     pagerState: PagerState,
     modifier: Modifier = Modifier,
-    spaceBetween: Dp = DimenTokens.VerySmall,
-    stepSize: Dp = DimenTokens.Small,
+    spaceBetween: Dp = DimenTokens.IndicatorSize,
+    stepSize: Dp = DimenTokens.IndicatorSize,
     shape: Shape = CircleShape,
     colors: IndicatorColors = IndicatorDefaults.colors(),
 ) {
@@ -90,17 +91,25 @@ fun ShiftIndicator(
     ) {
         (0 until pagerState.pageCount).forEach { currentPage ->
             val widthAnimation by animateDpAsState(
-                targetValue =
-                stepSize * pagerState.getPageProgress(currentPage).plus(1f),
+                targetValue = stepSize * pagerState.getPageProgress(currentPage).times(2).plus(1f),
                 label = "width animation"
             )
 
-            Box(
-                modifier = Modifier
-                    .height(stepSize)
-                    .width(widthAnimation)
-                    .background(colors.activeIndicatorColor, shape)
+            val color by animateColorAsState(
+                targetValue = lerp(
+                    start = colors.inactiveIndicatorColor,
+                    stop = colors.activeIndicatorColor,
+                    fraction = pagerState.getPageProgress(currentPage)
+                ), label = "color animation"
             )
+
+            Box(modifier = Modifier
+                .height(stepSize)
+                .width(widthAnimation)
+                .clip(shape)
+                .drawBehind {
+                    drawRect(color)
+                })
         }
     }
 }
@@ -115,20 +124,13 @@ internal fun Indicator(
     when (indicatorStyle) {
         IndicatorStyle.Step -> {
             StepIndicator(
-                pageIndex = pagerState.currentPage,
-                pageCount = pagerState.pageCount,
-                stepSize = DimenTokens.IndicatorSize,
-                modifier = modifier.padding(DimenTokens.LessLarge),
-                colors = colors
+                pagerState = pagerState, modifier = modifier.padding(DimenTokens.LessLarge), colors = colors
             )
         }
 
         IndicatorStyle.Shift -> {
             ShiftIndicator(
-                pagerState,
-                stepSize = DimenTokens.IndicatorSize,
-                modifier = modifier.padding(DimenTokens.LessLarge),
-                colors = colors
+                pagerState, modifier = modifier.padding(DimenTokens.LessLarge), colors = colors
             )
         }
     }
